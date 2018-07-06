@@ -1,8 +1,0 @@
-{
-  "input_file":  "../data/upsampling/upsampling_data/",
-  "filename" :  "upsampling.csv",
-  "model_checkpoint_file": "/aux/model_checkpoints/deep_residual_deep_residual_0_final.ckpt",
-  "time_units": "seconds",
-  "start_time": 0,
-  "end_time": 0
-}
