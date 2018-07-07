@@ -153,9 +153,9 @@ def build_downsampling_block(input_tensor,
                          padding=padding, name=name) + b
         if tensorboard_output:
             histogram_variable_summaries(l)
-#     with tf.name_scope('{}_layer_batch_norm'.format(layer_number)) as scope:
-#         # l = tf.nn.dropout(l, keep_prob=0.25)
-#         l = batch_norm(l, is_training, scope)
+    with tf.name_scope('{}_layer_batch_norm'.format(layer_number)) as scope:
+        # l = tf.nn.dropout(l, keep_prob=0.25)
+        l = batch_norm(l, is_training, scope)
     with tf.name_scope('{}_layer_conv_activation'.format(layer_number)):
         l = act(l, name=name)
         if tensorboard_output:
@@ -196,10 +196,10 @@ def build_upsampling_block(input_tensor, residual_tensor,
                          padding=padding, name=name) + b
         if tensorboard_output:
             histogram_variable_summaries(l)
-#     with tf.name_scope('{}_layer_batch_norm'.format(layer_number)) as scope:
-#         # l = tf.nn.dropout(l, keep_prob=0.25)
-#         l = batch_norm(l, is_training, scope)
-        # l = tf.nn.l2_normalize(l, dim=2)
+    with tf.name_scope('{}_layer_batch_norm'.format(layer_number)) as scope:
+        # l = tf.nn.dropout(l, keep_prob=0.25)
+        l = batch_norm(l, is_training, scope)
+        l = tf.nn.l2_normalize(l, dim=2)
     with tf.name_scope('{}_layer_conv_activation'.format(layer_number)):
         l = act(l, name=name)
         if tensorboard_output:
@@ -214,7 +214,7 @@ def build_upsampling_block(input_tensor, residual_tensor,
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
             l_eval = sess.run(l)
-            print('Upsampler layer shape and other', l_eval.shape, l_eval.shape[1])
+            print('Upsampler layer shape', l_eval.shape)
         sliced = tf.slice(residual_tensor,
                           begin=[0, 0, 0],
                           size=[-1, l_eval.shape[1], -1])

@@ -11,6 +11,7 @@ import pandas as pd
 import datetime
 import pipeline
 import time
+from tensorflow.python.saved_model import tag_constants
 
 #custom_shuffle_module = tf.load_op_library('src/shuffle_op.so')
 #shuffle = custom_shuffle_module.shuffle
@@ -64,8 +65,9 @@ current_data = []
 
 with tf.Graph().as_default():
     global_step = tf.train.get_or_create_global_step()
+    saver = tf.train.Saver() 
     with tf.Session() as sess:
-        saver = tf.train.Saver()        
+               
 #         Training pipeline
         inp = pipeline.train_input( train_filepath, BATCH_SIZE, NUMBER_OF_EPOCHS )
 
@@ -121,8 +123,9 @@ with tf.Graph().as_default():
                         pass
                 print( 'Training Loss in epoch {} is {}:'.format(i+1,avg_loss/(j+1) ))
                 training_loss.write('Training Loss for Epoch {} is {}:\n'.format((i+1) , avg_loss/(j+1)))
-
-
+                var_list = [v for v in tf.trainable_variables()]
+                print('variable :',var_list[0],sess.run(var_list[0]).shape)
+                print('Variable value:',sess.run(var_list[0]))
     #         Validation pipeline
                 validation = pipeline.train_input( validation_filepath, BATCH_SIZE, 1 )
                 up_audio_valid, down_audio_valid = validation
@@ -145,8 +148,7 @@ with tf.Graph().as_default():
                         pass
                 print('Validation loss for epoch {} is {}:'.format(i+1, avg_loss/(j+1)))
                 valid_loss.write('Validation Loss for Epoch {} is {}:\n'.format((i+1) , avg_loss/(j+1)))
-
-                checkpoint_path = saver.save(sess, './aux/checkpoint/checkpoint{}.ckpt'.format(i+1),global_step=global_step)
+                checkpoint_path = saver.save(sess, './aux/checkpoint/checkpoint_valid{}.ckpt'.format(i+1),global_step=global_step)
                 print('Checkpoint saved at:', checkpoint_path)
             training_loss.close()
             valid_loss.close()
