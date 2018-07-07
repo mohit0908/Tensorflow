@@ -148,7 +148,7 @@ with tf.Graph().as_default():
                         pass
                 print('Validation loss for epoch {} is {}:'.format(i+1, avg_loss/(j+1)))
                 valid_loss.write('Validation Loss for Epoch {} is {}:\n'.format((i+1) , avg_loss/(j+1)))
-                checkpoint_path = saver.save(sess, './aux/checkpoint/checkpoint_valid{}.ckpt'.format(i+1),global_step=global_step)
+                checkpoint_path = saver.save(sess, './aux/checkpoint/checkpoint{}.ckpt'.format(i+1),global_step=global_step)
                 print('Checkpoint saved at:', checkpoint_path)
             training_loss.close()
             valid_loss.close()
